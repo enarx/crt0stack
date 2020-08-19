@@ -1,10 +1,14 @@
 [package]
 name = "crt0stack"
-version = "0.6.0"
-authors = ["Harald Hoyer <harald@redhat.com>"]
+version = "0.1.0"
+authors = ["Harald Hoyer <harald@redhat.com>", "Nathaniel McCallum <npmccallum@redhat.com>"]
 edition = "2018"
 license = "Apache-2.0"
-description = "Create the inital stack for executing an elf binary."
+homepage = "https://github.com/enarx/crt0stack"
+repository = "https://github.com/enarx/crt0stack"
+description = "Tools for reading and creating Linux crt0 stack data"
+readme = "README.md"
+exclude = [ ".gitignore", ".github/*" ]
 
 categories = [
     "no-std",
@@ -14,11 +18,17 @@ keywords = [
     "no_std",
     "elf",
     "stack",
-    "auxiliary",
-    "vector",
     "auxv",
     "auxval"
 ]
+
+[badges]
+# See https://doc.rust-lang.org/cargo/reference/manifest.html#the-badges-section
+github = { repository = "enarx/crt0stack", workflow = "test" }
+#github = { repository = "enarx/crt0stack", workflow = "lint" }
+maintenance = { status = "actively-developed" }
+is-it-maintained-issue-resolution = { repository = "enarx/crt0stack" }
+is-it-maintained-open-issues = { repository = "enarx/crt0stack" }
 
 [features]
 default = ["std"]
