@@ -337,6 +337,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg_attr(miri, ignore)]
     fn real() {
         let reader = Reader::from_environ().prev().prev();
         assert_eq!(reader.count(), std::env::args().count());
