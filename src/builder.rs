@@ -310,6 +310,9 @@ mod tests {
 
     use core::mem::{transmute, MaybeUninit};
 
+    #[repr(C, align(32))]
+    struct Aligned<T>(T);
+
     struct Stack<'a> {
         idx: usize,
         stack: &'a mut [u8],
@@ -357,8 +360,8 @@ mod tests {
 
     #[test]
     fn stack() {
-        let mut stack = [1u8; 16];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([1u8; 16]);
+        let stack = stack.0.as_mut();
         let mut sp = Stack::new(stack);
         sp.push(16usize);
         sp.push(&[1u8, 2u8, 3u8, 4u8, 5u8, 6u8, 7u8, 8u8][..]);
@@ -370,8 +373,8 @@ mod tests {
 
     #[test]
     fn stack_slice() {
-        let mut stack = [1u8; 16];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([1u8; 16]);
+        let stack = stack.0.as_mut();
         let mut sp = Stack::new(stack);
         sp.push(&b"Hello World"[..]);
         assert_eq!(
@@ -382,8 +385,8 @@ mod tests {
 
     #[test]
     fn stack_unaligned() {
-        let mut stack = [0xFFu8; 24];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([0xFFu8; 24]);
+        let stack = stack.0.as_mut();
         let mut sp = Stack::new(stack);
         sp.push(1u8);
         sp.push(2usize);
@@ -400,8 +403,8 @@ mod tests {
 
     #[test]
     fn stack_pop() {
-        let mut stack = [1u8; 16];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([1u8; 16]);
+        let stack = stack.0.as_mut();
         {
             let mut sp = Stack::new(stack);
             sp.push(16usize);
@@ -417,8 +420,8 @@ mod tests {
     #[test]
     #[should_panic]
     fn stack_underflow() {
-        let mut stack = [1u8; 16];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([1u8; 16]);
+        let stack = stack.0.as_mut();
         {
             let mut sp = Stack::new(stack);
             sp.push(16usize);
@@ -436,8 +439,8 @@ mod tests {
     #[test]
     #[should_panic]
     fn stack_overflow() {
-        let mut stack = [1u8; 16];
-        let stack = stack.as_mut();
+        let mut stack = Aligned([1u8; 16]);
+        let stack = stack.0.as_mut();
         {
             let mut sp = Stack::new(stack);
             sp.push(16usize);
@@ -449,9 +452,6 @@ mod tests {
     #[test]
     fn stack_alignment() {
         // Prepare the crt0 stack.
-        #[repr(C, align(32))]
-        struct Aligned<T>(T);
-
         let mut aligned = Aligned([0u8; 1024]);
         let mut error = false;
         for i in 0..32 {
