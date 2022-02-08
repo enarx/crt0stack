@@ -1,7 +1,7 @@
 [package]
 name = "crt0stack"
 version = "0.1.0"
-authors = ["Harald Hoyer <harald@redhat.com>", "Nathaniel McCallum <npmccallum@redhat.com>"]
+authors = ["Harald Hoyer <harald@profian.com>", "Nathaniel McCallum <npmccallum@profian.com>"]
 edition = "2018"
 license = "Apache-2.0"
 homepage = "https://github.com/enarx/crt0stack"
