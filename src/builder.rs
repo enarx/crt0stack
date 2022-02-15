@@ -9,14 +9,14 @@ type Result<T> = core::result::Result<T, OutOfSpace>;
 
 // Internal use only
 trait Serializable {
-    fn into_buf(&self, dst: &mut [u8]) -> Result<usize>;
+    fn into_buf(self, dst: &mut [u8]) -> Result<usize>;
 }
 
 impl Serializable for usize {
     #[inline]
-    fn into_buf(&self, dst: &mut [u8]) -> Result<usize> {
+    fn into_buf(self, dst: &mut [u8]) -> Result<usize> {
         let (_prefix, dst, suffix) = unsafe { dst.align_to_mut::<usize>() };
-        dst[dst.len().checked_sub(1).ok_or(OutOfSpace)?] = *self;
+        dst[dst.len().checked_sub(1).ok_or(OutOfSpace)?] = self;
         let len = suffix.len();
         let len = len.checked_add(size_of::<usize>()).ok_or(OutOfSpace)?;
         Ok(len)
@@ -25,15 +25,15 @@ impl Serializable for usize {
 
 impl Serializable for u8 {
     #[inline]
-    fn into_buf(&self, dst: &mut [u8]) -> Result<usize> {
-        dst[dst.len().checked_sub(1).ok_or(OutOfSpace)?] = *self;
+    fn into_buf(self, dst: &mut [u8]) -> Result<usize> {
+        dst[dst.len().checked_sub(1).ok_or(OutOfSpace)?] = self;
         Ok(1)
     }
 }
 
 impl Serializable for &[u8] {
     #[inline]
-    fn into_buf(&self, dst: &mut [u8]) -> Result<usize> {
+    fn into_buf(self, dst: &mut [u8]) -> Result<usize> {
         let start = dst.len().checked_sub(self.len()).ok_or(OutOfSpace)?;
         let end = dst.len();
         dst[start..end].copy_from_slice(self);
