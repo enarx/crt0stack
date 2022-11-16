@@ -3,7 +3,6 @@
 use super::*;
 
 use core::marker::PhantomData;
-use core::mem::transmute;
 
 // Convert a usize (pointer) to a string.
 #[allow(clippy::integer_arithmetic)]
@@ -202,7 +201,7 @@ impl<'a> Iterator for Reader<'a, Aux> {
     fn next(&mut self) -> Option<Self::Item> {
         let val = unsafe { *self.stack.add(1) };
 
-        let entry = match unsafe { transmute(*self.stack) } {
+        let entry = match unsafe { *self.stack } {
             AT_NULL => return None,
             AT_EXECFD => Entry::ExecFd(val),
             AT_PHDR => Entry::PHdr(val),
