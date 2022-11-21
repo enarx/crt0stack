@@ -3,6 +3,7 @@ name = "crt0stack"
 version = "0.1.0"
 authors = ["Harald Hoyer <harald@profian.com>", "Nathaniel McCallum <npmccallum@profian.com>"]
 edition = "2018"
+rust-version = "1.56"
 license = "Apache-2.0"
 homepage = "https://github.com/enarx/crt0stack"
 repository = "https://github.com/enarx/crt0stack"
