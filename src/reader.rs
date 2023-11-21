@@ -224,11 +224,7 @@ impl<'a> Iterator for Reader<'a, Aux> {
             AT_RANDOM => Entry::Random(unsafe { *(val as *const [u8; 16]) }),
             AT_HWCAP2 => Entry::HwCap2(val),
             AT_EXECFN => Entry::ExecFilename(unsafe { u2s(val).ok()? }),
-
-            #[cfg(target_arch = "x86")]
             AT_SYSINFO => Entry::SysInfo(val),
-
-            #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
             AT_SYSINFO_EHDR => Entry::SysInfoEHdr(val),
 
             _ => {
